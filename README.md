@@ -11,7 +11,7 @@ npm install --save-dev style-loader
 ```
 
 It's recommended to combine `react-style-loader` with the [`css-loader`](https://github.com/webpack-contrib/css-loader)
-ypu will also require chaining in babel loader as the output will include react code
+you will also require chaining in babel loader as the output will include react code
 
 Then add the loader to your `webpack` config. For example:
 
@@ -25,8 +25,16 @@ body {
 
 **component.js**
 
-```js
-import './style.css';
+```jsx
+import StyleElement from './style.css';
+
+//Use Style Element like any other react element IE:
+return (
+  <>
+    <StyleElement />
+    <SomeComponent>{someData}</SomeComponent>
+  </>
+);
 ```
 
 **webpack.config.js**
@@ -84,7 +92,7 @@ Enables/disables ES modules named export for locals.
 **index.js**
 
 ```js
-import { fooBaz, bar } from './styles.css';
+import StyleElement, { fooBaz, bar } from './styles.css';
 
 console.log(fooBaz, bar);
 ```
@@ -149,213 +157,6 @@ module.exports = {
 };
 ```
 
-### Nonce
-
-There are two ways to work with `nonce`:
-
-- using the `attributes` option
-- using the `__webpack_nonce__` variable
-
-> ⚠ the `attributes` option takes precedence over the `__webpack_nonce__` variable
-
-#### `attributes`
-
-**component.js**
-
-```js
-import './style.css';
-```
-
-**webpack.config.js**
-
-```js
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: [
-          {
-            loader: 'style-loader',
-            options: {
-              attributes: {
-                nonce: '12345678',
-              },
-            },
-          },
-          'css-loader',
-        ],
-      },
-    ],
-  },
-};
-```
-
-The loader generate:
-
-```html
-<style nonce="12345678">
-  .foo {
-    color: red;
-  }
-</style>
-```
-
-#### `__webpack_nonce__`
-
-**create-nonce.js**
-
-```js
-__webpack_nonce__ = '12345678';
-```
-
-**component.js**
-
-```js
-import './create-nonce.js';
-import './style.css';
-```
-
-Alternative example for `require`:
-
-**component.js**
-
-```js
-__webpack_nonce__ = '12345678';
-
-require('./style.css');
-```
-
-**webpack.config.js**
-
-```js
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
-    ],
-  },
-};
-```
-
-The loader generate:
-
-```html
-<style nonce="12345678">
-  .foo {
-    color: red;
-  }
-</style>
-```
-
-#### Insert styles at top
-
-Inserts styles at top of `head` tag.
-
-**webpack.config.js**
-
-```js
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: [
-          {
-            loader: 'style-loader',
-            options: {
-              insert: function insertAtTop(element) {
-                var parent = document.querySelector('head');
-                var lastInsertedElement =
-                  window._lastElementInsertedByStyleLoader;
-
-                if (!lastInsertedElement) {
-                  parent.insertBefore(element, parent.firstChild);
-                } else if (lastInsertedElement.nextSibling) {
-                  parent.insertBefore(element, lastInsertedElement.nextSibling);
-                } else {
-                  parent.appendChild(element);
-                }
-
-                window._lastElementInsertedByStyleLoader = element;
-              },
-            },
-          },
-          'css-loader',
-        ],
-      },
-    ],
-  },
-};
-```
-
-#### Insert styles before target element
-
-Inserts styles before `#id` element.
-
-**webpack.config.js**
-
-```js
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: [
-          {
-            loader: 'style-loader',
-            options: {
-              insert: function insertBeforeAt(element) {
-                const parent = document.querySelector('head');
-                const target = document.querySelector('#id');
-
-                const lastInsertedElement =
-                  window._lastElementInsertedByStyleLoader;
-
-                if (!lastInsertedElement) {
-                  parent.insertBefore(element, target);
-                } else if (lastInsertedElement.nextSibling) {
-                  parent.insertBefore(element, lastInsertedElement.nextSibling);
-                } else {
-                  parent.appendChild(element);
-                }
-
-                window._lastElementInsertedByStyleLoader = element;
-              },
-            },
-          },
-          'css-loader',
-        ],
-      },
-    ],
-  },
-};
-```
-
-## Contributing
-
-Please take a moment to read our contributing guidelines if you haven't yet done so.
-
-[CONTRIBUTING](./.github/CONTRIBUTING.md)
-
 ## License
 
 [MIT](./LICENSE)
-
-[npm]: https://img.shields.io/npm/v/style-loader.svg
-[npm-url]: https://npmjs.com/package/style-loader
-[node]: https://img.shields.io/node/v/style-loader.svg
-[node-url]: https://nodejs.org
-[deps]: https://david-dm.org/webpack-contrib/style-loader.svg
-[deps-url]: https://david-dm.org/webpack-contrib/style-loader
-[tests]: https://github.com/webpack-contrib/style-loader/workflows/style-loader/badge.svg
-[tests-url]: https://github.com/webpack-contrib/style-loader/actions
-[cover]: https://codecov.io/gh/webpack-contrib/style-loader/branch/master/graph/badge.svg
-[cover-url]: https://codecov.io/gh/webpack-contrib/style-loader
-[chat]: https://badges.gitter.im/webpack/webpack.svg
-[chat-url]: https://gitter.im/webpack/webpack
-[size]: https://packagephobia.now.sh/badge?p=style-loader
-[size-url]: https://packagephobia.now.sh/result?p=style-loader
