@@ -27,6 +27,7 @@ module.exports = (api) => {
               },
             },
           ],
+          '@babel/preset-react',
         ],
       },
     ],

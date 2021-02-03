@@ -1,6 +1,6 @@
 {
-  "name": "style-loader",
-  "version": "2.0.0",
+  "name": "react-style-loader",
+  "version": "1.0.0",
   "description": "style loader module for webpack",
   "license": "MIT",
   "repository": "webpack-contrib/style-loader",
@@ -18,10 +18,8 @@
   "scripts": {
     "start": "npm run build -- -w",
     "clean": "del-cli dist",
-    "validate:runtime": "es-check es3 \"dist/runtime/**/*.js\"",
     "prebuild": "npm run clean",
     "build": "cross-env NODE_ENV=production babel src -d dist --copy-files",
-    "postbuild": "npm run validate:runtime",
     "commitlint": "commitlint --from=master",
     "security": "npm audit",
     "lint:prettier": "prettier --list-different .",
@@ -51,6 +49,7 @@
     "@babel/cli": "^7.11.6",
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.12.13",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "@webpack-contrib/defaults": "^6.3.0",
