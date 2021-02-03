@@ -7,7 +7,7 @@ Inject CSS into the React VDOM.
 To begin, you'll need to install `react-style-loader`:
 
 ```console
-npm install --save-dev style-loader
+npm install --save-dev react-style-loader
 ```
 
 It's recommended to combine `react-style-loader` with the [`css-loader`](https://github.com/webpack-contrib/css-loader)
@@ -76,7 +76,7 @@ Enables/disables ES modules named export for locals.
 
 > ⚠ It is not allowed to use JavaScript reserved words in css class names.
 
-> ⚠ Options `esModule` and `modules.namedExport` in `css-loader` and `style-loader` should be enabled.
+> ⚠ Options `esModule` and `modules.namedExport` in `css-loader` and `react-style-loader` should be enabled.
 
 **styles.css**
 
@@ -97,7 +97,7 @@ import StyleElement, { fooBaz, bar } from './styles.css';
 console.log(fooBaz, bar);
 ```
 
-You can enable a ES module named export using:
+You can enable an ES module named export using:
 
 **webpack.config.js**
 
@@ -108,8 +108,9 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
+          'babel-loader',
           {
-            loader: 'style-loader',
+            loader: 'react-style-loader',
             options: {
               modules: {
                 namedExport: true,
@@ -125,31 +126,6 @@ module.exports = {
               },
             },
           },
-        ],
-      },
-    ],
-  },
-};
-```
-
-## Examples
-
-### Source maps
-
-The loader automatically inject source maps when previous loader emit them.
-Therefore, to generate source maps, set the `sourceMap` option to `true` for the previous loader.
-
-**webpack.config.js**
-
-```js
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: [
-          'style-loader',
-          { loader: 'css-loader', options: { sourceMap: true } },
         ],
       },
     ],
